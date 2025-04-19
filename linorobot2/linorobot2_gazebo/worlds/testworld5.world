@@ -90,13 +90,58 @@
       <elevation>0</elevation>
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
-    <model name='testworld2'>
-      <pose>-13.7283 -10.9368 0 0 -0 0</pose>
+    <model name='testworld5'>
+      <pose>7.18626 -6.34261 0 0 -0 0</pose>
+      <link name='Wall_16'>
+        <collision name='Wall_16_Collision'>
+          <geometry>
+            <box>
+              <size>4.25 0.15 2.5</size>
+            </box>
+          </geometry>
+          <pose>0 0 1.25 0 -0 0</pose>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='Wall_16_Visual'>
+          <pose>0 0 1.25 0 -0 0</pose>
+          <geometry>
+            <box>
+              <size>4.25 0.15 2.5</size>
+            </box>
+          </geometry>
+          <material>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>1 1 1 1</ambient>
+          </material>
+          <meta>
+            <layer>0</layer>
+          </meta>
+        </visual>
+        <pose>17.6677 -4.1537 0 0 -0 1.5708</pose>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
       <link name='Wall_17'>
         <collision name='Wall_17_Collision'>
           <geometry>
             <box>
-              <size>13.5 0.15 2.5</size>
+              <size>59.75 0.15 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -118,7 +163,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>13.5 0.15 2.5</size>
+              <size>59.75 0.15 2.5</size>
             </box>
           </geometry>
           <material>
@@ -132,16 +177,16 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>-11.062 0.79213 0 0 -0 -2.35619</pose>
+        <pose>-12.1323 -2.1037 0 0 -0 3.14159</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
       </link>
-      <link name='Wall_18'>
-        <collision name='Wall_18_Collision'>
+      <link name='Wall_19'>
+        <collision name='Wall_19_Collision'>
           <geometry>
             <box>
-              <size>10 0.15 2.5</size>
+              <size>84.057 0.15 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -159,11 +204,11 @@
             </friction>
           </surface>
         </collision>
-        <visual name='Wall_18_Visual'>
+        <visual name='Wall_19_Visual'>
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>10 0.15 2.5</size>
+              <size>84.057 0.15 2.5</size>
             </box>
           </geometry>
           <material>
@@ -177,7 +222,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>-12.2995 -0.445307 0 0 -0 0.785398</pose>
+        <pose>-0.163462 5.85551 0 0 -0 -0.001797</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -186,7 +231,7 @@
         <collision name='Wall_20_Collision'>
           <geometry>
             <box>
-              <size>14 0.15 2.5</size>
+              <size>8.36294 0.15 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -208,7 +253,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>14 0.15 2.5</size>
+              <size>8.36294 0.15 2.5</size>
             </box>
           </geometry>
           <material>
@@ -222,7 +267,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>-9.78472 -7.39031 0 0 -0 -0.523599</pose>
+        <pose>41.9521 1.60611 0 0 -0 -1.53132</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -231,7 +276,7 @@
         <collision name='Wall_21_Collision'>
           <geometry>
             <box>
-              <size>22.75 0.15 2.5</size>
+              <size>19.808 0.15 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -253,7 +298,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>22.75 0.15 2.5</size>
+              <size>19.808 0.15 2.5</size>
             </box>
           </geometry>
           <material>
@@ -267,7 +312,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>5.99859 -5.20281 0 0 -0 0.523599</pose>
+        <pose>32.2857 -2.32027 0 0 -0 3.13079</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -276,7 +321,7 @@
         <collision name='Wall_22_Collision'>
           <geometry>
             <box>
-              <size>19.7824 0.15 2.5</size>
+              <size>4.25 0.15 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -298,7 +343,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>19.7824 0.15 2.5</size>
+              <size>4.25 0.15 2.5</size>
             </box>
           </geometry>
           <material>
@@ -312,52 +357,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>7.45955 5.64819 0 0 -0 2.58318</pose>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-      <link name='Wall_23'>
-        <collision name='Wall_23_Collision'>
-          <geometry>
-            <box>
-              <size>10 0.15 2.5</size>
-            </box>
-          </geometry>
-          <pose>0 0 1.25 0 -0 0</pose>
-          <max_contacts>10</max_contacts>
-          <surface>
-            <contact>
-              <ode/>
-            </contact>
-            <bounce/>
-            <friction>
-              <torsional>
-                <ode/>
-              </torsional>
-              <ode/>
-            </friction>
-          </surface>
-        </collision>
-        <visual name='Wall_23_Visual'>
-          <pose>0 0 1.25 0 -0 0</pose>
-          <geometry>
-            <box>
-              <size>10 0.15 2.5</size>
-            </box>
-          </geometry>
-          <material>
-            <script>
-              <uri>file://media/materials/scripts/gazebo.material</uri>
-              <name>Gazebo/Grey</name>
-            </script>
-            <ambient>1 1 1 1</ambient>
-          </material>
-          <meta>
-            <layer>0</layer>
-          </meta>
-        </visual>
-        <pose>-4.3946 7.36669 0 0 -0 -2.35619</pose>
+        <pose>22.4572 -4.21761 0 0 -0 -1.5708</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -366,7 +366,7 @@
         <collision name='Wall_25_Collision'>
           <geometry>
             <box>
-              <size>3.25 0.15 2.5</size>
+              <size>1.01 1 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -388,7 +388,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>3.25 0.15 2.5</size>
+              <size>1.01 1 2.5</size>
             </box>
           </geometry>
           <material>
@@ -402,7 +402,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>-9.54247 -3.54724 0 0 -0 -1.309</pose>
+        <pose>-5.12637 5.3738 0 0 -0 -1.5708</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -411,7 +411,7 @@
         <collision name='Wall_27_Collision'>
           <geometry>
             <box>
-              <size>7.5 0.15 2.5</size>
+              <size>2.088 0.3 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -433,7 +433,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>7.5 0.15 2.5</size>
+              <size>2.088 0.3 2.5</size>
             </box>
           </geometry>
           <material>
@@ -447,7 +447,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>3.51063 5.27028 0 0 -0 -0.523599</pose>
+        <pose>-32.9363 5.10061 0 0 -0 -1.5708</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -456,7 +456,7 @@
         <collision name='Wall_29_Collision'>
           <geometry>
             <box>
-              <size>2 0.15 2.5</size>
+              <size>1.64991 0.3 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -478,7 +478,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>2 0.15 2.5</size>
+              <size>1.64991 0.3 2.5</size>
             </box>
           </geometry>
           <material>
@@ -492,7 +492,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>-3.0459 -0.004778 0 0 -0 -1.0472</pose>
+        <pose>-32.8753 -1.45239 0 0 -0 1.5708</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -501,7 +501,7 @@
         <collision name='Wall_31_Collision'>
           <geometry>
             <box>
-              <size>1.75 0.15 2.5</size>
+              <size>2.4 0.3 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -523,7 +523,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>1.75 0.15 2.5</size>
+              <size>2.4 0.3 2.5</size>
             </box>
           </geometry>
           <material>
@@ -537,7 +537,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>-2.35416 -4.43161 0 0 -0 -1.8326</pose>
+        <pose>-32.9363 3.15661 0 0 -0 -1.5708</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -546,7 +546,7 @@
         <collision name='Wall_33_Collision'>
           <geometry>
             <box>
-              <size>8.25 0.15 2.5</size>
+              <size>3.35 0.25 2.5</size>
             </box>
           </geometry>
           <pose>0 0 1.25 0 -0 0</pose>
@@ -568,7 +568,7 @@
           <pose>0 0 1.25 0 -0 0</pose>
           <geometry>
             <box>
-              <size>8.25 0.15 2.5</size>
+              <size>3.35 0.25 2.5</size>
             </box>
           </geometry>
           <material>
@@ -582,7 +582,7 @@
             <layer>0</layer>
           </meta>
         </visual>
-        <pose>1.61046 0.630265 0 0 -0 -1.0472</pose>
+        <pose>-34.3723 -1.17839 0 0 -0 -2.87987</pose>
         <self_collide>0</self_collide>
         <enable_wind>0</enable_wind>
         <kinematic>0</kinematic>
@@ -590,10 +590,10 @@
       <static>1</static>
     </model>
     <state world_name='default'>
-      <sim_time>52 365000000</sim_time>
-      <real_time>52 443590220</real_time>
-      <wall_time>1731259285 927153350</wall_time>
-      <iterations>52365</iterations>
+      <sim_time>51 338000000</sim_time>
+      <real_time>51 418220922</real_time>
+      <wall_time>1731319732 424567836</wall_time>
+      <iterations>51338</iterations>
       <model name='ground_plane'>
         <pose>0 0 0 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -604,71 +604,71 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='testworld2'>
-        <pose>-8.46875 0.147856 0 0 -0 0</pose>
+      <model name='testworld5'>
+        <pose>-19.9493 2.88795 0 0 -0 0</pose>
         <scale>1 1 1</scale>
-        <link name='Wall_17'>
-          <pose>-19.5307 0.939986 0 0 0 -2.35619</pose>
+        <link name='Wall_16'>
+          <pose>-2.28161 -1.26575 0 0 -0 1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
-        <link name='Wall_18'>
-          <pose>-20.7682 -0.297451 0 0 -0 0.785398</pose>
+        <link name='Wall_17'>
+          <pose>-32.0816 0.784253 0 0 -0 3.14159</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+        <link name='Wall_19'>
+          <pose>-20.1128 8.74346 0 0 0 -0.001797</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_20'>
-          <pose>-18.2535 -7.24245 0 0 0 -0.523599</pose>
+          <pose>22.0028 4.49406 0 0 0 -1.53132</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_21'>
-          <pose>-2.47016 -5.05495 0 0 -0 0.523599</pose>
+          <pose>12.3364 0.567683 0 0 -0 3.13079</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_22'>
-          <pose>-1.0092 5.79605 0 0 -0 2.58318</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-        <link name='Wall_23'>
-          <pose>-12.8633 7.51455 0 0 0 -2.35619</pose>
+          <pose>2.50789 -1.32966 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_25'>
-          <pose>-18.0112 -3.39938 0 0 0 -1.309</pose>
+          <pose>-25.0757 8.26175 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_27'>
-          <pose>-4.95812 5.41814 0 0 0 -0.523599</pose>
+          <pose>-52.8856 7.98856 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_29'>
-          <pose>-11.5146 0.143078 0 0 0 -1.0472</pose>
+          <pose>-52.8246 1.43556 0 0 -0 1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_31'>
-          <pose>-10.8229 -4.28375 0 0 0 -1.8326</pose>
+          <pose>-52.8856 6.04456 0 0 0 -1.5708</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
         <link name='Wall_33'>
-          <pose>-6.85829 0.778121 0 0 0 -1.0472</pose>
+          <pose>-54.3216 1.70956 0 0 0 -2.87987</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -680,7 +680,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose>-70.4379 -15.5625 60.2953 0 0.879643 0.232194</pose>
+        <pose>14.9288 -65.161 147.483 0 1.26364 1.4202</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

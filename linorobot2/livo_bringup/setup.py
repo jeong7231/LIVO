@@ -25,6 +25,7 @@ setup(
         'console_scripts': [
         	'odom_node = livo_bringup.livo_odom:main',
             'driver_node = livo_bringup.livo_driver:main',
+            'imu_topic_remap = livo_bringup.imu_topic_remap:main',
         ],
     },
 )

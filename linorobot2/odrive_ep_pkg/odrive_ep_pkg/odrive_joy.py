@@ -101,7 +101,7 @@ class ControlClass(Node):
 
 
     def joy_callback(self, msg):
-        self.get_logger().info(f"Input : {msg}")
+        self.get_logger().debug(f"Input : {msg}")
 
         if msg.buttons[self.PLUS] == 1 :
             if self.curMode != "vel":

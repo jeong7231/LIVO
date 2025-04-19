@@ -78,6 +78,9 @@ class Odrive_ep(Node):
 
         self.cur_pos = posvel[0]
         self.cur_vel = posvel[1]
+        
+        cur_vel_filtered = [0.0,0.0,0.0,0.0]
+        cur_pos_filtered = [0.0,0.0,0.0,0.0]
 
         self.odrv1.axis0.watchdog_feed()
         self.odrv1.axis1.watchdog_feed()
@@ -86,31 +89,41 @@ class Odrive_ep(Node):
 
         self.read_error()
 
-        msg.motor0.pos = self.cur_pos[0]
-        msg.motor0.vel = self.cur_vel[0]
+        for i in range(4):
+        	if abs(self.cur_vel[i]) > 0.1:
+        		cur_vel_filtered[i] = self.cur_vel[i]
+        	else:
+        		cur_vel_filtered[i] = 0.0
+        	
+        cur_pos_filtered = self.cur_pos
+        		
+        	
+        	
+        msg.motor0.pos = cur_pos_filtered[0]		
+        msg.motor0.vel = -cur_vel_filtered[0]
 
-        msg.motor1.pos = self.cur_pos[1]
-        msg.motor1.vel = self.cur_vel[1]
+        msg.motor1.pos = cur_pos_filtered[1]
+        msg.motor1.vel = cur_vel_filtered[1]
 
-        msg.motor2.pos = self.cur_pos[2]
-        msg.motor2.vel = self.cur_vel[2]
+        msg.motor2.pos = cur_pos_filtered[2]
+        msg.motor2.vel = cur_vel_filtered[2]
 
-        msg.motor3.pos = self.cur_pos[3]
-        msg.motor3.vel = self.cur_vel[3]
+        msg.motor3.pos = cur_pos_filtered[3]
+        msg.motor3.vel = -cur_vel_filtered[3]
 
         
 
         # Publish the message to the Topic
         self.publisher_.publish(msg)
         # Display the message on the console
-        self.get_logger().info(f"{msg}")
+        self.get_logger().debug(f"{msg}")
 
         self.set_pos(self.goal_pos)
         self.set_vel(self.goal_vel)
 
     
     def listener_callback(self, msg):
-        self.get_logger().info(f"set goal {msg}")
+        self.get_logger().debug(f"set goal {msg}")
         self.goal_pos = [msg.motor0.pos, msg.motor1.pos, msg.motor2.pos, msg.motor3.pos]
         self.goal_vel = [msg.motor0.vel, msg.motor1.vel, msg.motor2.vel, msg.motor3.vel]
 
@@ -219,7 +232,9 @@ class Odrive_ep(Node):
         self.odrv2.axis1.trap_traj.config.vel_limit = 10
         self.odrv2.axis1.trap_traj.config.accel_limit = 2
         self.odrv2.axis1.trap_traj.config.decel_limit = 2
-
+        self.set_vel_control()
+	
+	
     '''self.odrv1.axis0.trap_traj.config.vel_limit = 40
         self.odrv1.axis0.trap_traj.config.accel_limit = 20
         self.odrv1.axis0.trap_traj.config.decel_limit = 20

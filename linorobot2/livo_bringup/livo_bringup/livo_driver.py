@@ -12,11 +12,11 @@ class ControlVelNode(Node):
     def __init__(self):
             super().__init__('livo_driver')
             self.QoS_ = 10
-            self.declare_parameter('mobile_robot_length', 0.30)
+            self.declare_parameter('mobile_robot_length', 0.22051)
             self.length = self.get_parameter('mobile_robot_length').value # 중심점으로부터 모터의 세로 위치
-            self.declare_parameter('mobile_robot_width', 0.40)
+            self.declare_parameter('mobile_robot_width', 0.232)
             self.width = self.get_parameter('mobile_robot_width').value # 중심점으로부터 모터의 가로 위치
-            self.declare_parameter('mobile_robot_radius', 0.0625)
+            self.declare_parameter('mobile_robot_radius', 0.076)
             self.radius = self.get_parameter('mobile_robot_radius').value # 메카넘휠 반지름
             self.vel_x = 0.0
             self.vel_y = 0.0
@@ -53,10 +53,10 @@ class ControlVelNode(Node):
         msg_motor.motor2.pos = 0.0
         msg_motor.motor3.pos = 0.0
 
-        msg_motor.motor0.vel = self.fl
-        msg_motor.motor1.vel = self.fr
-        msg_motor.motor2.vel = self.rl
-        msg_motor.motor3.vel = self.rr
+        msg_motor.motor1.vel = self.rl
+        msg_motor.motor0.vel = -1 * self.rr
+        msg_motor.motor2.vel = self.fl
+        msg_motor.motor3.vel = -1 * self.fr
 
         self.vel_publisher.publish(msg_motor)
 
