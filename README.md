@@ -1,6 +1,4 @@
-# 1. SLAM (Simultaneous Localization and Mapping) 분석
-
-SLAM 모드는 로봇이 미지의 환경을 탐험하며 실시간으로 지도를 생성하고, 그 지도 내에서 자신의 위치를 추정하는 기능이다.
+# 1. SLAM
 
 ## 1. 실행 명령어
 
@@ -26,9 +24,7 @@ ros2 launch livo_navigation slam.launch.py rviz:=true sim:=false
 
 ---
 
-# 2. Navigation (Autonomous Driving) 분석
-
-Navigation 모드는 SLAM을 통해 미리 생성된 지도를 이용해, 로봇이 현재 위치에서 목표 지점까지 스스로 경로를 계획하고 주행하는 기능이다.
+# 2. Navigation
 
 ## 2.1 실행 명령어
 
