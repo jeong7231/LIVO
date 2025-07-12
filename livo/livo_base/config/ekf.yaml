@@ -1,0 +1,40 @@
+ekf_filter_node:
+    ros__parameters:
+        frequency: 50.0
+        two_d_mode: true
+        publish_tf: true
+ 
+        map_frame: map             
+        odom_frame: odom            
+        base_link_frame: base_footprint 
+        world_frame: odom 
+
+        #x     , y     , z,
+        #roll  , pitch , yaw,
+        #vx    , vy    , vz,
+        #vroll , vpitch, vyaw,
+        #ax    , ay    , az
+        odom0: odom/unfiltered
+        odom0_config: [false, false, false,
+                       false, false, false,
+                       true, true, false,
+                       false, false, true,
+                       false, false, false]
+
+        imu0: imu/data
+        imu0_config: [false, false, false,
+                      false, false, false,
+                      false, false, false,
+                      false, false, true,
+                      false, false, false]
+                      
+        odom1: /odom/camera # Adjust if namespacing ZED camera (e.g. /zed/odom)
+        odom1_config: [true, true, false,    # X, Y
+                false, false, true,    # Yaw
+                false, false, false,   # Vx, Vy, Vz
+                false, false, true,    # Vyaw
+                false, false, false]   # Ax, Ay, Az
+
+        odom1_differential: false
+        odom1_relative: true
+        odom1_queue_size: 2
