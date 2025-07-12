@@ -21,7 +21,7 @@ ros2 launch livo_navigation slam.launch.py rviz:=true sim:=false
 ## 1.2 단계별 설명
 
 1.  **센서/구동계 활성화**: `livo_odom.launch.py`가 실행되어 Lidar, Realsense 카메라, IMU 센서 및 모터 엔코더를 이용한 기본 오도메트리 노드(`odom_node`)가 활성화된다.
-2.  **위치 추정 강화**: `rtab_color_livo.launch.py`가 실행되어 Realsense 카메라 기반의 Visual Odometry 가 활성화된다.
+2.  **위치 추정 강화**: `rtab_color_livo.launch.py`가 실행되어 Realsense 카메라 기반의 Visual Odometry가 활성화된다.
 3.  **수동 조작 준비**: `joy_node`는 조이스틱 입력을 `/joy` 토픽으로 발행하고, `odrive_ep_pkg`의 `odrive_ep_joy` 노드는 이를 구독하여 모터 제어 명령인 `/goal_posvel_double`로 변환한다. `odrive_ep_motor_double` 노드가 이 명령을 받아 실제 로봇을 움직인다.
 4.  **SLAM 실행**: `slam.launch.py`가 SLAM 알고리즘 노드를 실행합한다. 이 노드는 `/scan`, `/imu/data`, `/odom` 등 모든 센서 데이터를 구독하여 지도를 생성(`map` 토픽)하고, `map` 프레임과 `odom` 프레임 간의 관계(`tf`)를 지속적으로 계산하여 발행한다.
 5.  **지도 작성**: 사용자는 조이스틱으로 로봇을 움직여 환경을 탐색하고, SLAM 노드는 로봇의 이동 경로와 센서 데이터를 바탕으로 지도를 완성해나갑니다. RViz를 통해 이 과정이 시각화된다.
