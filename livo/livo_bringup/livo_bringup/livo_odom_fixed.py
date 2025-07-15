@@ -4,22 +4,43 @@ import math
 from rclpy.node import Node
 from rclpy import parameter
 from nav_msgs.msg import Odometry
-from sensor_msgs.msg import JointState
+from sensor_msgs.msg import JointState, Imu
 from geometry_msgs.msg import TransformStamped
 from std_msgs.msg import Float32MultiArray 
 #from sensor_msgs.msg import Imu
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Twist
-# from tf2_ros import TransformBroadcaster # base_footprint publish - REMOVED
+from tf2_ros import TransformBroadcaster # base_footprint publish
 import tf2_ros
 from odrive_ep_interfaces.msg import Motor
+from rclpy.qos import QoSProfile, ReliabilityPolicy
+
+
+ODOM_POSE_COVARIANCE = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                        0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 99999.0, 0.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 99999.0, 0.0,
+                        0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+ODOM_TWIST_COVARIANCE = [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+                         0.0, 1.0, 0.0, 0.0, 0.0, 0.0,
+                         0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+                         0.0, 0.0, 0.0, 99999.0, 0.0, 0.0,
+                         0.0, 0.0, 0.0, 0.0, 99999.0, 0.0,
+                         0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+
+
 
 class OdometryNode(Node):
 
     def __init__(self):
         super().__init__('odom_publisher')
         self.QoS_ = 10
-        self.QoS_imu = 1
+        self.QoS_imu = QoSProfile(
+            reliability=ReliabilityPolicy.BEST_EFFORT,
+            depth=10
+        )
         self.frame_id = 'odom'
         self.child_frame_id = 'base_footprint'
         self.last_joint_positions_ = [0,0,0,0]
@@ -28,7 +49,7 @@ class OdometryNode(Node):
         self.length = self.get_parameter('mobile_robot_length').value # 중심점으로부터 모터의 세로 위치
         self.declare_parameter('mobile_robot_width', 0.232)
         self.width = self.get_parameter('mobile_robot_width').value # 중심점으로부터 모터의 가로 위치
-        self.declare_parameter('mobile_robot_radius', 0.076)
+        self.declare_parameter('mobile_robot_radius', 0.0762)
         self.radius = self.get_parameter('mobile_robot_radius').value # 메카넘휠 반지름
         self.vel_x = 0.0
         self.vel_y = 0.0
@@ -48,28 +69,28 @@ class OdometryNode(Node):
         self.w1, self.w2, self.w3, self.w4 = 0,0,0,0
         self.odom_pos_y, self.odom_pos_x, self.odom_ori_z = 0,0,0
         self.old_time = self.get_clock().now().nanoseconds
-        self.odom_publisher = self.create_publisher(Odometry, '/odom/wheel', self.QoS_) # MODIFIED: Topic name changed
+        self.odom_publisher = self.create_publisher(Odometry, 'odom/wheel', self.QoS_)
         #wheel/odometry
         # 모터의 실제 각속도를 받아온다.
         self.vel_subscription = self.create_subscription(
             Motor,
-            'goal_posvel_double',
+            'current_posvel_double',
             self.cmd_vel_callback,
             self.QoS_)
 
-        self.rotation_subscription = self.create_subscription(
-            Float64,
-            'imu/yaw',
-            self.rotation_callback,
-            self.QoS_
-            )
+        # self.rotation_subscription = self.create_subscription(
+        #     Imu,
+        #     'imu/data',
+        #     self.rotation_callback,
+        #     self.QoS_imu
+        #     )
         self.joint_state_subscription = self.create_subscription(
             JointState,
             'joint_states',
             self.joint_statue_callback,
             self.QoS_
         )
-        # self.tf_broadcaster = TransformBroadcaster(self) # REMOVED
+        self.tf_broadcaster = TransformBroadcaster(self)
 
     def joint_statue_callback(self,msg):
         self.time_now = self.get_clock().now().to_msg()
@@ -93,8 +114,10 @@ class OdometryNode(Node):
 
     def cmd_vel_callback(self, msg): #속도값 받아오기
         self.vel_msg = msg
-        self.w1 = (msg.motor0.vel*0.1047198 /1.2)*2 # rpm to rad/s
-        self.w2 = (msg.motor1.vel*0.1047198 /1.2)*2
+        	
+        	
+        self.w1 = (msg.motor1.vel*0.1047198 /1.2)*2 # rpm to rad/s
+        self.w2 = (msg.motor0.vel*0.1047198 /1.2)*2
         self.w3 = (msg.motor2.vel*0.1047198 /1.2)*2
         self.w4 = (msg.motor3.vel*0.1047198 /1.2)*2
         # self.w1 = (msg.data[0]*0.1047198) # rpm to rad/s
@@ -102,33 +125,36 @@ class OdometryNode(Node):
 
         
     def rotation_callback(self, msg): #EKF-IMU값 받아오기
-        self.yaw = msg.data
+        self.yaw = msg.angular_velocity.y
 
     def odom_calaulator(self): #Odometry값 계산하기
         self.time = self.get_clock().now().nanoseconds
         duration = (int(self.time) - int(self.old_time))/1000000000
         self.vel_x = (self.radius/4)*(self.w1 + self.w2 + self.w3 + self.w4)
         self.vel_y = (self.radius/4)*(-self.w1 + self.w2 + self.w3 - self.w4)
-        #self.rot_z = (self.radius/4)*(4/(self.length + self.width))*(-self.w1 + self.w2 - self.w3 + self.w4) #2
-        yaw = self.yaw
-        if yaw - self.yaw_old > 180:
-            self.del_vel_z = math.radians((yaw - self.yaw_old) - 360)
-        elif yaw - self.yaw_old < -180:
-            self.del_vel_z = math.radians((yaw - self.yaw_old) + 360)
-        else:
-            self.del_vel_z = math.radians(yaw - self.yaw_old)
+        self.rot_z = (self.radius/4)*(1/(self.length + self.width))*(-self.w1 + self.w2 - self.w3 + self.w4) #2
+        # if self.yaw > 0.1:
+        #     self.del_vel_z = self.yaw/math.pi
+        # else:
+        #     self.del_vel_z = 0.0
+        # if yaw - self.yaw_old > 180:
+        #     self.del_vel_z = math.radians((yaw - self.yaw_old) - 360)
+        # elif yaw - self.yaw_old < -180:
+        #     self.del_vel_z = math.radians((yaw - self.yaw_old) + 360)
+        # else:
+        #     self.del_vel_z = math.radians(yaw - self.yaw_old)
         del_x = (self.vel_x * np.cos(self.odom_ori_z) - self.vel_y * np.sin(self.odom_ori_z) ) * duration
         del_y = (self.vel_x * np.sin(self.odom_ori_z) + self.vel_y * np.cos(self.odom_ori_z) ) * duration
         self.odom_pos_x += del_x
         self.odom_pos_y += del_y
-        self.odom_ori_z += self.del_vel_z
-        self.get_logger().info(str(del_x)+str(del_y))
+        self.odom_ori_z += self.rot_z * duration * 1.57075
+        #self.get_logger().info(str(del_x)+str(del_y))
         #self.rot_old = self.rot_z
         #self.del_rot_z_vel_old = del_rot
-        self.yaw_old = yaw
+        #self.yaw_old = self.del_vel_z
         self.old_time = self.time
 
-    def publish(self): # Odometry만 발행
+    def publish(self): # Odometry와 tf발행
         msg_odom = Odometry()
         msg_odom.header.frame_id = self.frame_id
         msg_odom.child_frame_id = self.child_frame_id
@@ -145,10 +171,28 @@ class OdometryNode(Node):
         msg_odom.pose.pose.orientation.w = orientation_quaternion[3]
         msg_odom.twist.twist.linear.x = self.vel_x
         msg_odom.twist.twist.linear.y = self.vel_y
-        msg_odom.twist.twist.angular.z = self.del_vel_z
+        msg_odom.twist.twist.angular.z = self.rot_z
+        
+        #msg_odom.pose.covariance = ODOM_POSE_COVARIANCE
+        #msg_odom.twist.covariance = ODOM_TWIST_COVARIANCE
+
+
+        msg_tf = TransformStamped()
+        msg_tf.header.frame_id = self.frame_id
+        msg_tf.child_frame_id = self.child_frame_id
+        msg_tf.header.stamp = self.time_now
+
+        msg_tf.transform.translation.x = msg_odom.pose.pose.position.x
+        msg_tf.transform.translation.y = msg_odom.pose.pose.position.y
+        msg_tf.transform.translation.z = msg_odom.pose.pose.position.z
+        msg_tf.transform.rotation.x = msg_odom.pose.pose.orientation.x
+        msg_tf.transform.rotation.y = msg_odom.pose.pose.orientation.y
+        msg_tf.transform.rotation.z = msg_odom.pose.pose.orientation.z
+        msg_tf.transform.rotation.w = msg_odom.pose.pose.orientation.w
 
         self.odom_publisher.publish(msg_odom)
-        # self.tf_broadcaster.sendTransform(msg_tf) # REMOVED
+        self.tf_broadcaster.sendTransform(msg_tf)
+        #self.get_logger().info("현재 x좌표 : {0}, Y좌표 : {1}, 헤딩 : {2}".format(self.odom_pos_x,self.odom_pos_y,self.odom_ori_z))
         
 
     def quaternion_from_euler(self, ai, aj, ak):

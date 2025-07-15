@@ -50,8 +50,18 @@ def generate_launch_description():
             )),
             launch_arguments={
                 'pointcloud.enable': 'true',
-                'ordered_pc': 'true',
-                'initial_reset': 'true'
+                'pointcloud.ordered_pc': 'true',
+                'initial_reset': 'true',
+                'enable_accel' : 'true',
+                'enable_gyro' : 'true',
+                'unite_imu_method' : '1',
+                'enable_infra1' : 'true',
+                'enable_infra2' : 'true',
             }.items()
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(PathJoinSubstitution(
+                [FindPackageShare('linorobot2_description'), 'launch', 'description.launch.py']
+            ))
         ),
     ])
