@@ -1,73 +1,66 @@
 slam_toolbox:
   ros__parameters:
 
-    # Plugin params
-    solver_plugin: solver_plugins::CeresSolver
-    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
-    ceres_preconditioner: SCHUR_JACOBI
-    ceres_trust_strategy: LEVENBERG_MARQUARDT
-    ceres_dogleg_type: TRADITIONAL_DOGLEG
-    ceres_loss_function: None
+    # ───────── Plugin params ───────────────────────────────────────────
+    solver_plugin: solver_plugins::CeresSolver               # 사용할 그래프 최적화 백엔드
+    ceres_linear_solver: SPARSE_NORMAL_CHOLESKY              # 선형 시스템 해법(희소 조르스키)
+    ceres_preconditioner: SCHUR_JACOBI                       # 선형 솔버 사전조건자
+    ceres_trust_strategy: LEVENBERG_MARQUARDT                # 비선형 LM 신뢰영역 기법
+    ceres_dogleg_type: TRADITIONAL_DOGLEG                    # Dog-leg 알고리즘 유형
+    ceres_loss_function: None                                # 잔차 외적 함수(없음 → L2)
 
-    # ROS Parameters
-    odom_frame: odom
-    map_frame: map
-    base_frame: base_footprint
-    scan_topic: /scan
-    mode: mapping #localization
+    # ───────── ROS frame · topic ──────────────────────────────────────
+    odom_frame: odom                                         # EKF가 내보내는 오도메트리 프레임
+    map_frame: map                                           # 전역 지도 프레임
+    base_frame: base_footprint                               # 로봇 본체 기준 프레임
+    scan_topic: /scan                                        # 수신할 2-D LiDAR 토픽
+    mode: mapping                                            # 지도 작성(mapp­ing) / 위치추정(localization)
 
-    # if you'd like to immediately start continuing a map at a given pose
-    # or at the dock, but they are mutually exclusive, if pose is given
-    # will use pose
-    #map_file_name: test_steve
-    # map_start_pose: [0.0, 0.0, 0.0]
-    #map_start_at_dock: true
+    # ───────── 실행 및 디버깅 ──────────────────────────────────────────
+    debug_logging: true                                      # DEBUG 레벨 로그 출력
+    throttle_scans: 1                                        # 스캔 다운샘플 비율(1=모두 사용)
+    transform_publish_period: 0.02                           # /tf 변환 퍼블리시 주기[s] (0=미발행)
+    map_update_interval: 5.0                                 # Occupancy Grid 재계산 주기[s]
+    resolution: 0.05                                         # Occupancy Grid 해상도[m/셀]
+    max_laser_range: 10.0                                    # 라이다 최대 유효 거리[m]
+    minimum_time_interval: 0.5                               # 연속 키프레임 삽입 최소 간격[s]
+    transform_timeout: 0.3                                   # TF lookup 타임아웃[s]
+    tf_buffer_duration: 30.0                                 # 내부 TF 버퍼 보존 시간[s]
+    stack_size_to_use: 40000000                              # 대용량 직렬화용 스택 크기[byte]
+    enable_interactive_mode: true                            # RViz 단축키(Q/W/E) 수동 조작 허용
 
-    debug_logging: true
-    throttle_scans: 1
-    transform_publish_period: 0.02 #if 0 never publishes odometry
-    map_update_interval: 5.0
-    resolution: 0.05
-    max_laser_range: 10.0 #for rastering images
-    minimum_time_interval: 0.5
-    transform_timeout: 0.3
-    tf_buffer_duration: 30.
-    stack_size_to_use: 40000000 #// program needs a larger stack size to serialize large maps
-    enable_interactive_mode: true
+    # ───────── 키프레임 · 루프 클로저 일반 파라미터 ───────────────────
+    use_scan_matching: true                                  # ICP 스캔 매칭 활성화
+    use_scan_barycenter: true                                # 스캔 바리센터를 추가 특징으로 사용
+    minimum_travel_distance: 0.5                             # 선형 이동 ≥ 이 값일 때 새 키프레임[m]
+    minimum_travel_heading: 0.5                              # 회전 ≥ 이 값(radian)일 때 새 키프레임
+    scan_buffer_size: 10                                     # 최근 스캔 버퍼 크기[개]
+    scan_buffer_maximum_scan_distance: 10.0                  # 버퍼에 남길 스캔 최대 거리[m]
+    link_match_minimum_response_fine: 0.1                    # 인접 스캔 fine 매칭 최소 상관계수
+    link_scan_maximum_distance: 1.5                          # 인접 스캔 연결 허용 최대 거리[m]
+    loop_search_maximum_distance: 3.0                        # 루프 클로저 탐색 반경[m]
+    do_loop_closing: true                                    # 루프 클로저 활성화 여부
+    loop_match_minimum_chain_size: 10                        # 루프 후보 연속 키프레임 최소 수
+    loop_match_maximum_variance_coarse: 3.0                  # Coarse 단계 허용 최대 분산
+    loop_match_minimum_response_coarse: 0.35                 # Coarse 단계 최소 상관계수
+    loop_match_minimum_response_fine: 0.45                   # Fine 단계 최소 상관계수
 
-    # General Parameters
-    use_scan_matching: true
-    use_scan_barycenter: true
-    minimum_travel_distance: 0.5
-    minimum_travel_heading: 0.5
-    scan_buffer_size: 10
-    scan_buffer_maximum_scan_distance: 10.0
-    link_match_minimum_response_fine: 0.1  
-    link_scan_maximum_distance: 1.5
-    loop_search_maximum_distance: 3.0
-    do_loop_closing: true 
-    loop_match_minimum_chain_size: 10           
-    loop_match_maximum_variance_coarse: 3.0  
-    loop_match_minimum_response_coarse: 0.35    
-    loop_match_minimum_response_fine: 0.45
+    # ───────── ① 스캔 매칭 Correlation(인접) ──────────────────────────
+    correlation_search_space_dimension: 0.5                  # coarse 탐색 폭[m]
+    correlation_search_space_resolution: 0.01                # 탐색 격자 해상도[m]
+    correlation_search_space_smear_deviation: 0.1            # 가우시안 확산 σ[m]
 
-    # Correlation Parameters - Correlation Parameters
-    correlation_search_space_dimension: 0.5
-    correlation_search_space_resolution: 0.01
-    correlation_search_space_smear_deviation: 0.1 
+    # ───────── ② 루프 클로저 Correlation ─────────────────────────────
+    loop_search_space_dimension: 8.0                         # 루프 탐색 공간 큐브 한 변[m]
+    loop_search_space_resolution: 0.05                       # 루프 탐색 그리드 해상도[m]
+    loop_search_space_smear_deviation: 0.03                  # 루프 가우시안 확산 σ[m]
 
-    # Correlation Parameters - Loop Closure Parameters
-    loop_search_space_dimension: 8.0
-    loop_search_space_resolution: 0.05
-    loop_search_space_smear_deviation: 0.03
-
-    # Scan Matcher Parameters
-    distance_variance_penalty: 0.5      
-    angle_variance_penalty: 1.0    
-
-    fine_search_angle_offset: 0.00349     
-    coarse_search_angle_offset: 0.349   
-    coarse_angle_resolution: 0.0349        
-    minimum_angle_penalty: 0.9
-    minimum_distance_penalty: 0.5
-    use_response_expansion: true
+    # ───────── Scan Matcher Penalties & Offsets ───────────────────────
+    distance_variance_penalty: 0.5                           # 거리 편차 가중치(ICP cost)
+    angle_variance_penalty: 1.0                              # 각도 편차 가중치
+    fine_search_angle_offset: 0.00349                        # fine 매칭 각도 탐색 폭[rad]
+    coarse_search_angle_offset: 0.349                        # coarse 매칭 각도 탐색 폭[rad]
+    coarse_angle_resolution: 0.0349                          # coarse 각도 그리드 해상도[rad]
+    minimum_angle_penalty: 0.9                               # 최소 각도 패널티(매칭 신뢰 조절)
+    minimum_distance_penalty: 0.5                            # 최소 거리 패널티
+    use_response_expansion: true                             # 매칭 응답값 격자 확산 사용 여부
